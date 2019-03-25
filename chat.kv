@@ -1,0 +1,77 @@
+#:kivy 1.10.1
+#:import RiseInTransition kivy.uix.screenmanager.RiseInTransition
+#:import C kivy.utils.get_color_from_hex
+<TextInput>:
+    multiline: False
+    padding: [10,0.5* (self.height- self.line_height)]
+
+<ChatLabel@Label>:
+    text_size: (self.width,None)
+    halign: 'left'
+    valign: 'top'
+    size_hint: (1,None)
+    height: self.texture_size[1]
+    color: C('#101010')
+    markup: True
+
+
+<ScrollView>:
+    canvas.before:
+        Color:
+            rgb: 1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+  
+
+
+ScreenManager:
+    transition: RiseInTransition()
+    Screen:
+        name: 'login'
+        BoxLayout:
+            orientation: 'vertical'
+            GridLayout:
+                Label:
+                    text: 'Server:'
+                TextInput:
+                    id: server
+                    text: '0.0.0.0'
+                Label:
+                    text: 'Nickname:'
+                TextInput:
+                    id: nickname
+                    text: 'Kivy'
+            Button:
+                text: 'Connect'
+                on_press: app.connect()
+
+    
+    Screen:
+        name: 'chatroom'
+        BoxLayout:
+            orientation: 'vertical'
+            Button:
+                text:'Disconnect'
+                on_press: app.disconnect()
+            ScrollView:
+                ChatLabel:
+                    id: chat_logs
+                    text: 'User says: foo\nUser says: bar'
+            BoxLayout:
+                height: 90
+                orientation: 'horizontal'
+                padding: 0
+                size_hint: (1,None)
+                TextInput:
+                    id: message
+                    on_text_validate: app.send_msg()
+                Button:
+                    text: 'Send'
+                    size_hint: (0.3,1)
+                    on_press: app.send_msg()
+
+
+
