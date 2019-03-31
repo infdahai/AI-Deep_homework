@@ -11,7 +11,7 @@ def esc_markup(msg):
     return (msg.replace('&', '&amp;')
             .replace('[', '&bl;')
             .replace(']', '&br;'))
-
+# replace some illega character
 
 class ChatClient(protocol.Protocol):
     def connectionMade(self):
@@ -38,16 +38,22 @@ class ChatApp(App):
     def on_connect(self,conn):
         self.conn = conn
         self.root.current = 'chatroom'
-    
+        # use the GUI scroll view
+
     def send_msg(self):
+        #send message
         msg = self.root.ids.message.text.encode('utf8')
         self.conn.write('%s:%s' % (self.nick,msg))
         self.root.ids.chat_logs.text += ('[b][color=2980B9]{}:[/color][/b] {}\n'.format(self.nick, esc_markup(msg)))
+                # set color
         self.root.ids.message.text =''
+        
     def on_message(self,msg):
         self.root.ids.chat_logs.text +=msg+'\n'
-    
+            
+
     def disconnect(self):
+        # invodk the disconnect funciton
         if self.conn:
             self.conn.loseConnection()
             del self.conn

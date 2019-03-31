@@ -13,6 +13,7 @@ class Chat_API():
         self.info = ""
         self.data={}
 
+    """ generate data in json type """
     def _update(self,info):
         self.data = {
             "reqType":0,
@@ -37,14 +38,14 @@ class Chat_API():
     def run(self,info):
         #self.info = input()
         self._update(info)
-        req = json.dumps(self.data).encode('utf8')
+        req = json.dumps(self.data).encode('utf8')  # str to unicode
         http_post = urllib.request.Request(self.api_url, data=req, headers={'content-type': 'application/json'})
         response = urllib.request.urlopen(http_post)
-        response_str = response.read().decode('utf8')
+        response_str = response.read().decode('utf8')   # unicode to str
         response_dic = json.loads(response_str)
-        response_text = response_dic['results'][0]['values']['text']
+        response_text = response_dic['results'][0]['values']['text']    
+        # get text data
         return response_text
-
 
 
 
